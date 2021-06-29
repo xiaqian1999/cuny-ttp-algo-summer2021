@@ -2,49 +2,53 @@
 
 # Given a string, find the length of the longest substring in it with no more than K distinct characters.
 # You can assume that K is less than or equal to the length of the given string.
-'''
-input: string and k that is target unique characters
-output: return longest length of substring that contains target k
-
-initialize windowStart = 0 start at index 0, resultLen = 0
-initliaze a directionary to count the current appearence of the unique characters
-for each index value in the string:
-  check if the current unique characters is in the dictionary:
-  if not append the unique characters into the dictionary by set its count as 0
-  else if the character is in the dict then increment its count by 1
-
-  After we are getting the numbers of unique charater's count in the directionary:
-    while the unique characters in the uniqueV is greater than k distinct required characters:
-      initlize the unique charater for the windowStart index, starts with index 0's value
-      decrement the count of the value that position at windowStart index
-      if the count of the windoeStart index is 0:
-        then delete the key from the dictionary
-      
-      increment the windowStart by 1
-    after this while loop, then update the longest length
-return resultLen
 
 '''
-def longest_substring_with_k_distinct(str1, k):
-  windowStart = 0
-  resultLen = 0
-  uniqueV = {}
-  for each in range(len(str1)):
-    currentV = str1[each]
-    if currentV not in uniqueV:
-      uniqueV[currentV] = 0
-    uniqueV[currentV]+=1
+Input: A string, target integer with k unique integers
+Output: number that is the longest substring in the given string with k unique character
+
+Edge case: if k is 0, return empty string, since there will be no such substring
+initliaze with a startIndex, that we want to constantly looping and update throughout the string
+intialize with dictionary that contains the count of each unique characters as key-value pair -> unique charater : count
+intialize with the longestSize = 0
+
+loop through each index in the given string with for loop:
+  initliaze with a current index's character -> currentChar = str[each]
+  check if the current index's character is in the dictionary:
+   if not in the dictionary -> initialize the value as 0
+   if its in the dictionary -> increment the value by 1
+  while the length of the dictionary is greater than target k:
+    initialize the first index value in the dictionary
+    decrement the count of the unique character
+    check if the value of the count is equal to 0:
+    if so, we delete the entire key value
+  
+  outside of the while loop, we increment the startIndex value
+update the longestSize as max(longestSize, currentIndex - startIndex + 1)
+return longestSize
+'''
+
+def longest_substring_with_k_distinct(str, k):
+  startIndex = 0
+  uniqueCount = {}
+  longestSize = 0
+
+  for each in range(len(str)):
+    currentChar = str[each]
+    if currentChar not in uniqueCount:
+      uniqueCount[currentChar] = 0
+    uniqueCount[currentChar] += 1
     
-    while len(uniqueV) > k:
-      startV = str1[windowStart]
-      uniqueV[startV] -= 1
-      if uniqueV[startV] == 0:
-        del uniqueV[startV]
+    while len(uniqueCount) > k:
+      uniqueChar = str[startIndex]
+      uniqueCount[uniqueChar] -= 1
+      if uniqueCount[uniqueChar] == 0:
+        del uniqueCount[uniqueChar]
       
-      windowStart+=1
+      startIndex +=1
+    longestSize = max(longestSize, each - startIndex + 1)
     
-    resultLen = max(resultLen, each - windowStart + 1)
-  return resultLen
+  return longestSize
 
 def main():
   print("Length of the longest substring: " + str(longest_substring_with_k_distinct("araaci", 2)))
@@ -59,21 +63,6 @@ def main():
 
 
 main()
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 
